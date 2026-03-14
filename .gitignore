@@ -12,3 +12,8 @@ build/
 .env
 *.log
 .DS_Store
+
+# Editor / IDE
+*.code-workspace
+.cursor/
+.vscode/
