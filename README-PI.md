@@ -6,7 +6,9 @@ Run everything on a **Raspberry Pi Zero 2 W** (or any Pi with WiFi and GPIO):
 - **motion_server.py** → plays trooper sounds / TTS  
 - **pi_pir_trigger.py** → watches PIR, POSTs to the server on localhost  
 
-You only need: **Pi + PIR + power + audio out** (HDMI or USB sound card).
+**Hardware:** PIR **HC-SR501** (5 V VCC, 3.3 V logic output). Audio **Waveshare WM8960 Audio HAT** (I2S, 3.5 mm jack + speaker outs).
+
+You only need: **Pi + PIR + power + audio out** (WM8960 HAT, HDMI, or USB sound card).
 
 ---
 
@@ -14,7 +16,7 @@ You only need: **Pi + PIR + power + audio out** (HDMI or USB sound card).
 
 | PIR (HC-SR501) | Pi Zero 2 W        |
 |----------------|--------------------|
-| VCC            | 3.3 V (pin 1 or 17) |
+| VCC            | **5 V** (pin 2 or 4) |
 | OUT            | **GPIO 17** (pin 11) |
 | GND            | GND (pin 6, 9, 14, etc.) |
 

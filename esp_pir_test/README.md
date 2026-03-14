@@ -1,6 +1,8 @@
 # ESP32 + PIR motion sensor → storm trooper voice
 
-This sketch runs on an **ESP32** and sends an HTTP POST to your laptop when the PIR detects motion. The laptop runs `motion_server.py` and plays trooper sounds or TTS.
+This sketch runs on an **ESP32** and sends an HTTP POST to your laptop (or Pi) when the PIR detects motion. The server runs `motion_server.py` and plays trooper sounds or TTS.
+
+**Hardware:** PIR **HC-SR501** (5 V VCC, 3.3 V logic output). Audio on the server side: **Waveshare WM8960 Audio HAT** (see README-PI.md for Pi setup).
 
 ---
 
@@ -9,14 +11,14 @@ This sketch runs on an **ESP32** and sends an HTTP POST to your laptop when the 
 | Item | Notes |
 |------|--------|
 | **ESP32** dev board | Any ESP32 (DevKit, NodeMCU-32S, etc.) |
-| **PIR motion sensor** | e.g. HC-SR501 (3-pin: VCC, OUT, GND) |
+| **PIR motion sensor** | **HC-SR501** (3-pin: VCC 5 V, OUT 3.3 V logic, GND) |
 | **Jumper wires** | 3 wires to connect PIR to ESP32 |
 
 ### Wiring
 
 | PIR (HC-SR501) | ESP32 |
 |----------------|--------|
-| VCC            | 3.3 V (or 5 V if your board has 5 V) |
+| VCC            | 5 V (or 3.3 V; board-dependent) |
 | OUT            | **GPIO 13** (D13) |
 | GND            | GND |
 
