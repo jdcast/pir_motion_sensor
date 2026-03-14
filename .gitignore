@@ -1,0 +1,14 @@
+.secrets
+trooper_sounds/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.env
+*.log
+.DS_Store
