@@ -1,3 +1,5 @@
 flask>=3.0
 edge-tts>=6.0
 openai>=1.0
+# Pi GPIO (pi_pir_trigger.py); install in venv so systemd’s venv python sees it
+RPi.GPIO>=0.7.1

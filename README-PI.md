@@ -30,7 +30,8 @@ Change `PIR_PIN` in `pi_pir_trigger.py` if you use another GPIO.
 # System packages (audio + GPIO)
 sudo apt update
 sudo apt install python3-venv python3-pip ffmpeg
-sudo apt install python3-rpi.gpio   # or: pip install RPi.GPIO
+# RPi.GPIO: use the venv (required for systemd). apt’s python3-rpi.gpio is system Python only.
+# pip install -r requirements.txt already includes RPi.GPIO; or: source venv/bin/activate && pip install RPi.GPIO
 
 # Project (recommended path for systemd; see “Git on the Pi” below)
 cd /home/pi/pir_motion_sensor
