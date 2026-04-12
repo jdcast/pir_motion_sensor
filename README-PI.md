@@ -32,38 +32,64 @@ sudo apt update
 sudo apt install python3-venv python3-pip ffmpeg
 sudo apt install python3-rpi.gpio   # or: pip install RPi.GPIO
 
-# Project
-cd /home/pi/esp32_pir_motion_sensor   # or your path
+# Project (recommended path for systemd; see “Git on the Pi” below)
+cd /home/pi/pir_motion_sensor
+git clone https://github.com/jdcast/pir_motion_sensor.git .   # first time only; or your fork URL
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# Put your audio files in trooper_sounds/
+# Put your audio files in trooper_sounds/ (not in git; create the folder on the Pi)
 ```
 
 ---
 
-## Run
+## Git on the Pi: clone/pull vs copying files
 
-**Terminal 1 – server (plays audio):**
+**Prefer `git clone` / `git pull` on the Pi** into a fixed directory (e.g. `/home/pi/pir_motion_sensor`): one place for `motion_server.py`, `pi_pir_trigger.py`, `requirements.txt`, and the systemd units; updates are a `git pull` and restart. Copying single files into `~/Downloads` is fine for quick tests but paths drift and systemd is harder to keep consistent.
+
+---
+
+## Run (manual, two terminals)
+
+**Terminal 1 – server (WM8960 example):**
 ```bash
+cd /home/pi/pir_motion_sensor
 source venv/bin/activate
+export AUDIO_DEVICE=plughw:0,0
+export TROOPER_SOUNDS_DIR=/home/pi/pir_motion_sensor/trooper_sounds
 python3 motion_server.py
 ```
 
-**Terminal 2 – PIR trigger (needs GPIO, often run with sudo or add user to gpio group):**
+**Terminal 2 – PIR trigger** (`pi` must be in the **`gpio`** group, or use `sudo`):
 ```bash
+cd /home/pi/pir_motion_sensor
 source venv/bin/activate
 python3 pi_pir_trigger.py
 ```
 
-Motion on the PIR → trigger script POSTs to `http://127.0.0.1:5000/motion` with `play_sound: true` → server plays a random file from `trooper_sounds/` (or TTS if you don’t use `play_sound`).
+```bash
+sudo usermod -aG gpio,audio pi   # then log out/in or reboot
+```
+
+Motion on the PIR → trigger POSTs to `http://127.0.0.1:5000/motion` with `play_sound: true` → server plays a random file from `trooper_sounds/` (or TTS if you don’t use `play_sound`).
 
 ---
 
-## Run at boot (optional)
+## Run at boot (systemd)
 
-Use two systemd units: one for `motion_server.py`, one for `pi_pir_trigger.py`, both after network and (if needed) sound device are up.
+Templates live in **`systemd/`** in this repo. They assume **`/home/pi/pir_motion_sensor`**, venv Python, `AUDIO_DEVICE=plughw:0,0`, and `TROOPER_SOUNDS_DIR` pointing at your sounds folder. **Edit the `.service` files** if you use another user, path, or device.
+
+```bash
+cd /home/pi/pir_motion_sensor
+sudo cp systemd/pir-motion-server.service systemd/pir-motion-trigger.service /etc/systemd/system/
+# Edit copies in /etc/systemd/system/ if needed, then:
+sudo systemctl daemon-reload
+sudo systemctl enable --now pir-motion-server.service
+sudo systemctl enable --now pir-motion-trigger.service
+```
+
+See **`systemd/README.md`** for status, logs, and troubleshooting.
 
 ---
 

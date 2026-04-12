@@ -1,0 +1,20 @@
+[Unit]
+Description=PIR motion trooper sound server (motion_server.py)
+After=network-online.target sound.target
+Wants=network-online.target
+# If you use the WM8960 HAT driver, uncomment so ALSA is ready first:
+# After=wm8960-soundcard.service
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/pir_motion_sensor
+Environment=AUDIO_DEVICE=plughw:0,0
+Environment=TROOPER_SOUNDS_DIR=/home/pi/pir_motion_sensor/trooper_sounds
+ExecStart=/home/pi/pir_motion_sensor/venv/bin/python3 /home/pi/pir_motion_sensor/motion_server.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=PIR GPIO trigger → POST localhost motion server
+After=network-online.target pir-motion-server.service
+Wants=network-online.target pir-motion-server.service
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/pir_motion_sensor
+ExecStart=/home/pi/pir_motion_sensor/venv/bin/python3 /home/pi/pir_motion_sensor/pi_pir_trigger.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
